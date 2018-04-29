@@ -1,0 +1,121 @@
+
+/**
+ * artgEchParametreGeneral entity.
+ * @author AE OMICRONE team.
+ */
+entity ArtgEchParametreGeneral {
+	idNumParamGen Long required,
+	repertoireEntree Blob,
+	repertoireSortieRejet Blob,
+	repertoireParametrage Blob,
+	repertoireArchivage Blob,
+    classeGammeExtraction String,
+    classeGammeComptable String,
+    classeGammeTarification String,
+    classeGammeStrucTarif String,
+    classeGammeExtraction String,
+    utilCreation Boolean,
+    dateCreation Date,
+    utilMdification Boolean,
+    dateModification Date
+}
+
+/**
+ * ArtgEchTypeFichier entity.
+ * @author AE OMICRONE team.
+ */
+entity ArtgEchTypeFichier {
+	codeTypeFichier String required,
+	libTypeFichier String,
+	dateDebutValidite Date,
+	dateFinValidite Date,
+    utilCreation Boolean,
+    dateCreation Date,
+    utilMdification Boolean,
+    dateModification Date
+}
+
+/**
+ * ArtgEchEtat entity.
+ * @author AE OMICRONE team.
+ */
+entity ArtgEchEtat {
+	codeEtat String required,
+	libEtat String,
+	dateDebutValidite Date,
+	dateFinValidite Date,
+    utilCreation Boolean,
+    dateCreation Date,
+    utilMdification Boolean,
+    dateModification Date
+}
+
+/**
+ * ArtgEchFichier entity.
+ * @author AE OMICRONE team.
+ */
+entity ArtgEchFichier {
+	idNumFichier Long required,
+	nomFichier Blob,
+	dateReception Date,
+	commentaire Blob,
+    utilCreation Boolean,
+    dateCreation Date,
+    utilMdification Boolean,
+    dateModification Date
+}
+
+/**
+ * ArtgEchEtatFichier entity 
+ * (relation ManyToMany between ArtgEchFichier and ArtgEchEtat).
+ * @author AE OMICRONE team.
+ */
+entity ArtgEchEtatFichier {
+	dateEtatFichier Date,
+	nbreProduitAnomalie Long,
+	nbreProduitCompare Long,
+	nbreProduitRejete Long,
+	nbreProduitValide Long,
+    utilCreation Boolean,
+    dateCreation Date,
+    utilMdification Boolean,
+    dateModification Date
+}
+
+/**
+ * ArtgEchEtatTypeFichier entity 
+ * (relation ManyToMany between ArtgEchEtat and ArtgEchTypeFichier).
+ * @author AE OMICRONE team.
+ */
+entity ArtgEchEtatTypeFichier {
+	numOrdre Long required,
+	obligatoireON Boolean,
+	facultatifON Boolean,
+    utilCreation Boolean,
+    dateCreation Date,
+    utilMdification Boolean,
+    dateModification Date
+}
+
+
+
+relationship ManyToOne {
+	ArtgEchFichier{artgEchParametreGeneral} to ArtgEchParametreGeneral
+}
+relationship ManyToOne {
+	ArtgEchFichier{artgEchTypeFichier} to ArtgEchTypeFichier
+}
+relationship ManyToMany {
+	ArtgEchEtatFichier{artgEchFichier(idNumFichier)} to ArtgEchFichier,
+	ArtgEchEtatFichier{artgEchEtat(codeEtat)} to ArtgEchEtat
+}
+
+relationship ManyToMany {
+	ArtgEchEtatTypeFichier{artgEchEtat(codeEtat)} to ArtgEchEtat,
+	ArtgEchEtatTypeFichier{artgEchTypeFichier(codeTypeFichier)} to ArtgEchTypeFichier
+}
+
+dto * with mapstruct
+
+// Set service options to all except few
+service all with parametrageFichierServiceImpl
